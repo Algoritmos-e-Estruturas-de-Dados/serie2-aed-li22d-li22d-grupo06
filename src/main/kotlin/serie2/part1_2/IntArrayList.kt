@@ -1,6 +1,6 @@
 package serie2.part1_2
 
-class IntArrayList : Iterable <Int> {
+class IntArrayList(capacity: Int) : Iterable <Int> {
 
     fun append(x:Int):Boolean {
         TODO("Not yet implemented")
