@@ -3,11 +3,11 @@ package serie2.part4
 import kotlin.test.*
 
 class HashMapTest {
-    /*
+
         // Test put one entry and get value
         @Test
         fun testEmpty(){
-            val map = HashMap<Int, String>()
+            val map = AEDHashMap<Int, String>()
             assertEquals(0, map.size)
             assertNull( map.get(0) )
         }
@@ -15,7 +15,7 @@ class HashMapTest {
         // Test put one entry and get value
         @Test
         fun testPutAndGetOneEntry(){
-            val map = HashMap<Int, String>()
+            val map = AEDHashMap<Int, String>()
             assertNull( map.put(1, "one") )
             assertEquals(1, map.size)
             assertEquals("one", map.get(1))
@@ -24,7 +24,7 @@ class HashMapTest {
         // Test put and get
         @Test
         fun testPutAndGet(){
-            val map = HashMap<Int, String>()
+            val map = AEDHashMap<Int, String>()
             assertNull( map.put(1, "one"))
             assertNull( map.put(2, "two"))
             assertNull( map.put(3, "three"))
@@ -37,7 +37,7 @@ class HashMapTest {
         // Test put and get with same key
         @Test
         fun testPutAndGetWithSameKey(){
-            val map = HashMap<Int, String>()
+            val map = AEDHashMap<Int, String>()
             assertNull( map.put(1, "one") )
             assertNull( map.put(2, "three") )
             assertEquals(2, map.size)
@@ -51,7 +51,7 @@ class HashMapTest {
         // Test Iterator with empty map
         @Test
         fun testIteratorWithEmptyMap(){
-            val map = HashMap<Int, String>()
+            val map = AEDHashMap<Int, String>()
             assertFalse( map.iterator().hasNext() )
             var count = 0
             for( entry in map){
@@ -59,11 +59,10 @@ class HashMapTest {
             }
             assertEquals(0, count)
         }
-
         // Test Iterator
         @Test
         fun testIterator(){
-            val map = HashMap<Int, String>()
+            val map = AEDHashMap<Int, String>()
             assertNull( map.put(1, "one") )
             assertNull( map.put(2, "two") )
             assertNull( map.put(3, "three") )
@@ -80,20 +79,20 @@ class HashMapTest {
             }
         }
 
-        // Test expand
-        @Test
-        fun testExpand(){
-            val initCap = 5
-            val map = HashMap<Int, String>(initCap, 1.0F)
-            for (i in 1..initCap*5+1){
-                val cap = map.capacity
-                assertNull( map.put(i, i.toString()) )
-                assertEquals( i.toString(), map.get(i ) )
-                if (cap+1 == map.size){
-                    assertEquals(cap*2, map.capacity)
-                    //println( "Size ${map.size}: $cap - Capacity doubled to ${map.capacity}")
-               }
+            // Test expand
+            @Test
+            fun testExpand(){
+                val initCap = 5
+                val map = AEDHashMap<Int, String>(initCap, 1.0F)
+                for (i in 1..initCap*5+1){
+                    val cap = map.capacity
+                    assertNull( map.put(i, i.toString()) )
+                    assertEquals( i.toString(), map.get(i ) )
+                    if (cap+1 == map.size){
+                        assertEquals(cap*2, map.capacity)
+                        println( "Size ${map.size}: $cap - Capacity doubled to ${map.capacity}")
+                   }
+                }
             }
-        }
-    */
+
 }
