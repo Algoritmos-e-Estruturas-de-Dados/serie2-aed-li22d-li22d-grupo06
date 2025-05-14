@@ -34,20 +34,13 @@ class IntArrayList(val capacity: Int) : Iterable<Int> {
     }
 
     override fun iterator(): Iterator<Int> {
-        var current = -1
-        fun hasNext(): Boolean {
-            return current < size
-        }
-
-        fun next(): Int {
-            if (!hasNext()) throw NoSuchElementException()
-            val value = intList[(head + current) % capacity]
-            current++
-            return value
-        }
         return object : Iterator<Int> {
-            override fun hasNext(): Boolean = hasNext()
-            override fun next(): Int = next()
+            var current = 0
+            override fun hasNext(): Boolean = current < size
+            override fun next(): Int {
+                if (!hasNext()) throw NoSuchElementException()
+                return intList[(head + current++) % capacity]
+            }
         }
     }
 }
