@@ -1,6 +1,6 @@
 package serie2.part1_2
 
-class IntArrayList(val capacity: Int) /*  : Iterable <Int> */ {
+class IntArrayList(val capacity: Int) : Iterable<Int> {
     val intList = IntArray(capacity)
     var size = 0
     var tail = 0
@@ -31,5 +31,23 @@ class IntArrayList(val capacity: Int) /*  : Iterable <Int> */ {
         head = (head + 1) % capacity
         size--
         return true
+    }
+
+    override fun iterator(): Iterator<Int> {
+        var current = -1
+        fun hasNext(): Boolean {
+            return current < size
+        }
+
+        fun next(): Int {
+            if (!hasNext()) throw NoSuchElementException()
+            val value = intList[(head + current) % capacity]
+            current++
+            return value
+        }
+        return object : Iterator<Int> {
+            override fun hasNext(): Boolean = hasNext()
+            override fun next(): Int = next()
+        }
     }
 }
