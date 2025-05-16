@@ -1,9 +1,11 @@
 package serie2.part4
 
+import java.util.NoSuchElementException
+
 class AEDHashMap<K, V>(
     initialCapacity: Int = 16, val loadFactor: Float = 0.75f,
     override var size: Int = 0,
-    override val capacity: Int = initialCapacity
+    override var capacity: Int = initialCapacity
 ) : MutableMap<K, V> {
     private class HashNode<K, V>(
         override val key: K, override var value: V,
@@ -21,7 +23,20 @@ class AEDHashMap<K, V>(
 
 
     private fun expand() {
-        TODO()
+        val newCapacity = capacity * 2
+        val newTable: Array<HashNode<K, V>?> = arrayOfNulls(newCapacity)
+        for (i in table.indices) {
+            var node = table[i]
+            while (node != null) {
+                val idx = node.hc % newCapacity
+                val nextNode = node.next
+                node.next = newTable[idx]
+                newTable[idx] = node
+                node = nextNode
+            }
+        }
+        table = newTable
+        capacity = newCapacity
     }
 
     override fun get(key: K): V? {
@@ -37,7 +52,7 @@ class AEDHashMap<K, V>(
     }
 
     override fun put(key: K, value: V): V? {
-        if (size.toFloat() / capacity >= loadFactor) {
+        if (size * loadFactor >= capacity) {
             expand()
         }
         val idx = key.hashCode() % table.size
@@ -55,16 +70,34 @@ class AEDHashMap<K, V>(
         return null
     }
 
-    override fun iterator(): Iterator<MutableMap.MutableEntry<K, V>> {
-        return object : Iterator<MutableMap.MutableEntry<K, V>> {
-            var current = 0
-            override fun hasNext(): Boolean = current < size
-            override fun next(): MutableMap.MutableEntry<K, V> {
-                if (!hasNext()) throw NoSuchElementException()
-                val node = table[current]
-                current++
-                return node ?: throw NoSuchElementException()
+    private inner class MyIterator : Iterator<MutableMap.MutableEntry<K, V>> {
+        var currIdx = -1;
+        var currNode: HashNode<K, V>? = null
+        var list: HashNode<K, V>? = null
+
+        override fun hasNext(): Boolean {
+            if (currNode != null) return true
+            while (currIdx < capacity) {
+                if (list == null) {
+                    currIdx++
+                    if (currIdx < capacity) list = table[currIdx]
+                } else {
+                    currNode = list
+                    list?.let { l -> list = l.next }
+                    return true
+                }
             }
+            return false;
+        }
+
+        override fun next(): MutableMap.MutableEntry<K, V> {
+            if (!hasNext()) throw NoSuchElementException()
+            val aux = currNode
+            currNode = null
+            return aux ?: Any() as MutableMap.MutableEntry<K, V>
         }
     }
+
+    override fun iterator(): Iterator<MutableMap.MutableEntry<K, V>> = MyIterator()
+
 }
